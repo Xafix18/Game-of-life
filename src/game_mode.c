@@ -20,33 +20,32 @@ const char default_pattern[6][6] = {
     {' ', ' ', ' ', ' ', ' ', ' '}
 };
 
-// Fonction pour charger le motif dans la fenêtre de jeu
+// Function to load the pattern into the game window
 int file_game(grid_t game_grid) {
     FILE *file = fopen(PATTERN_FILE, "r");
 
     if (!file) {
-        // Si le fichier n'existe pas, le créer avec le motif par défaut
+        // If the file does not exist, create it with the default pattern
         file = fopen(PATTERN_FILE, "w+");
         if (!file) return PATTERN_FILE_ERROR;
         
-
-        // Écrire le motif par défaut dans le fichier
+        // Write the default pattern to the file
         for (int i = 0; i < 6; i++) {
             for (int j = 0; j < 6; j++) {
                 fputc(default_pattern[i][j], file);
             }
             if(i != 5) fputc('\n', file);
-        }   
+        }    
         fseek(file, 0, SEEK_SET);
     }
 
-    // Lire le fichier et charger le motif dans la fenêtre de jeu
+    // Read the file and load the pattern into the game window
     char line[8]; // 6 characters + \n + \0
-	for(int i = 0; i < 6; ++i) {
-		if(!fgets(line, sizeof(line), file)) continue;
+    for(int i = 0; i < 6; ++i) {
+        if(!fgets(line, sizeof(line), file)) continue;
 
-		for(int j = 0; j < 6; ++j) game_grid[i][j] = line[j] == 'O';
-	}
+        for(int j = 0; j < 6; ++j) game_grid[i][j] = line[j] == 'O';
+    }
 
     fclose(file);
     return 1;
